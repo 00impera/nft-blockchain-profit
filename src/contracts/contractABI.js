@@ -1,18 +1,19 @@
 import { ethers } from 'ethers';
-import { 
-  NFT_ABI, 
-  MARKETPLACE_ABI, 
-  ERC20_ABI, 
-  CONTRACT_ADDRESSES 
-} from '../contracts/contractABI';
+import {
+  NFT_ABI,
+  MARKETPLACE_ABI,
+  USDC_ABI
+} from './abis';
+import {
+  ADDRESSES,
+  NETWORK
+} from './addresses';
 
-const POLYGON_RPC = 'https://polygon-rpc.com';
-
-export const provider = new ethers.JsonRpcProvider(POLYGON_RPC);
+const provider = new ethers.JsonRpcProvider(NETWORK.RPC_URL);
 
 export const getNFTContract = () => {
   return new ethers.Contract(
-    CONTRACT_ADDRESSES.NFT,
+    ADDRESSES.NFT,
     NFT_ABI,
     provider
   );
@@ -20,7 +21,7 @@ export const getNFTContract = () => {
 
 export const getMarketplaceContract = () => {
   return new ethers.Contract(
-    CONTRACT_ADDRESSES.MARKETPLACE,
+    ADDRESSES.MARKETPLACE,
     MARKETPLACE_ABI,
     provider
   );
@@ -28,36 +29,8 @@ export const getMarketplaceContract = () => {
 
 export const getUSDCContract = () => {
   return new ethers.Contract(
-    CONTRACT_ADDRESSES.USDC,
-    ERC20_ABI,
+    ADDRESSES.USDC,
+    USDC_ABI,
     provider
   );
-};
-
-export const fetchUserData = async (address) => {
-  try {
-    const nftContract = getNFTContract();
-    const marketplaceContract = getMarketplaceContract();
-    const usdcContract = getUSDCContract();
-
-    const [nftBalance, usdcBalance, decimals, pendingEarnings] = await Promise.all([
-      nftContract.balanceOf(address),
-      usdcContract.balanceOf(address),
-      usdcContract.decimals(),
-      marketplaceContract.getPendingAmount(address),
-    ]);
-
-    return {
-      nftBalance: Number(nftBalance),
-      usdcBalance: Number(ethers.formatUnits(usdcBalance, decimals)),
-      pendingEarnings: Number(ethers.formatUnits(pendingEarnings, 6)),
-    };
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    throw error;
-  }
-};
-
-export const isValidAddress = (address) => {
-  return /^0x[a-fA-F0-9]{40}$/.test(address);
 };

@@ -3,18 +3,19 @@
     "name": "CryptoLocker",
     "slug": "nft-blockchain-profit",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "android": {
       "package": "com.yourcompany.cryptolocker",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "targetSdkVersion": 35,
-      "compileSdkVersion": 35,
-      "minSdkVersion": 23,
-      "permissions": [
-        "com.google.android.gms.permission.AD_ID"
-      ]
+      }
     },
     "extra": {
       "eas": {
